@@ -1,10 +1,8 @@
-FROM node:18.12.0-alpine AS node
+FROM node:18.12.0-alpine
 
 WORKDIR /usr/src/app
-COPY package.json ./
-COPY .babelrc ./
-RUN npm install
+COPY . .
 
-COPY --from=node /usr/src/app/ ./
+RUN npm install && npm run build
 
 CMD npm start
