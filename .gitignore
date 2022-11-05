@@ -130,3 +130,7 @@ dist
 .idea
 .vscode
 .DS_Store
+
+# Webpack build
+!/public/images
+public
