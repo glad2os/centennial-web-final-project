@@ -1,1 +1,0 @@
-{"version":3,"file":"./css/public.css","mappings":";;;AACE;EACE;ACAJ,C","sources":["webpack://final/./assets/css/templates/_index.scss","webpack://final/./assets/css/main.scss"],"sourcesContent":["body.index {\n  header {\n    background-color: #7a7a7a;\n  }\n}","body.index header {\n  background-color: #7a7a7a;\n}"],"names":[],"sourceRoot":""}

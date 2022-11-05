@@ -133,5 +133,4 @@ dist
 
 # Webpack build
 !/public/images
-public/js/
-public/css/
+public
