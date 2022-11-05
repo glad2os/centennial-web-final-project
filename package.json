@@ -1,24 +1,30 @@
 {
   "name": "final",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "version": "0.0.0",
+  "private": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "backend": "node --env=NODE_ENV=production",
-    "dev": "node ./backend/bin/www"
+    "start": "node ./bin/www",
+    "build": "webpack --env=NODE_ENV=production",
+    "dev": "webpack --watch --env=NODE_ENV=development",
+    "production": "webpack --env=NODE_ENV=production"
   },
-  "author": "",
-  "license": "ISC",
   "dependencies": {
-    "@angular/cli": "^14.2.7",
-    "cookie-parser": "^1.4.6",
-    "debug": "^4.3.4",
-    "express": "^4.18.2",
-    "express-generator": "^4.16.1",
-    "morgan": "^1.10.0"
+    "@babel/core": "^7.20.2",
+    "@babel/preset-env": "^7.20.2",
+    "babel-loader": "^9.1.0",
+    "cookie-parser": "~1.4.4",
+    "css-loader": "^6.7.1",
+    "debug": "~2.6.9",
+    "ejs": "^3.1.8",
+    "express": "~4.16.1",
+    "http-errors": "~1.6.3",
+    "mini-css-extract-plugin": "^2.6.1",
+    "morgan": "~1.9.1",
+    "sass": "^1.56.0",
+    "sass-loader": "^13.1.0",
+    "webpack-merge": "^5.8.0"
   },
-  "engines" : {
-    "node" : ">=16.10.0"
+  "devDependencies": {
+    "webpack-cli": "^4.10.0"
   }
 }
