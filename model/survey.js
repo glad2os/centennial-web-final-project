@@ -19,6 +19,14 @@ async function getSurveyBySurveyId(surveyId) {
     }, {$group: {_id: "$surveys.survey"}}]);
 }
 
+async function getSurveysSurveyBySurveysSurveyID(surveysSurveyId) {
+    return config.userModel.aggregate([{$unwind: '$surveys'}, {$unwind: '$surveys.survey'}, {$match: {'surveys.survey._id': mongoose.Types.ObjectId(surveysSurveyId)}}, {
+        $project: {
+            "login": false, "password": false, "_id": false,
+        }
+    }, {$group: {_id: "$surveys.survey"}}]);
+}
+
 async function getAll() {
     return await config.userModel.aggregate([{$unwind: '$surveys'}, {$unwind: '$surveys.survey'}, {
         $project: {
@@ -27,13 +35,21 @@ async function getAll() {
     }, {$group: {_id: "$surveys._id", "surveys": {$addToSet: "$surveys.survey"}}}])
 }
 
-async function remove(surveyId){
-    return await config.userModel.updateMany(
-        { },
-        { $pull: { "surveys": {"_id": mongoose.Types.ObjectId(surveyId)}} }
-    );
+async function remove(surveyId) {
+    return await config.userModel.updateMany({}, {$pull: {"surveys": {"_id": mongoose.Types.ObjectId(surveyId)}}});
+}
+
+async function update(surveyDAO) {
+    //TODO: fix
+    return await config.userModel.updateMany({
+        "surveys.survey._id": mongoose.Types.ObjectId(surveyDAO._id),
+    }, {
+        $set: {
+            "surveys.survey.$.question": surveyDAO.question, "surveys.survey.$.answers": surveyDAO.answers,
+        }
+    });
 }
 
 module.exports = {
-    createSurvey, getAll, getSurveyBySurveyId, remove
+    createSurvey, getAll, getSurveyBySurveyId, remove, update, getSurveysSurveyBySurveysSurveyID
 }

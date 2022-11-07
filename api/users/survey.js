@@ -96,9 +96,60 @@ router.post('/remove/:id', async function (req, res) {
         return;
     }
 
+    // TODO: validate is the survey belongs to the current user
     res.json(await surveyModel.remove(req.params.id));
 });
 
+router.post('/survey/:id', async function (req, res) {
+    // TODO: Need a security fix
+    if (req.session.userid === undefined || !await userModel.validateUserBySessionData(req.session.userid)) {
+        res.status(403);
+        res.json({error: "Authorization Error"});
+        return;
+    }
+
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+        res.status(400);
+        res.json({error: "Invalid survey id!"});
+        return;
+    }
+
+    // TODO: validate is the survey belongs to the current user
+    res.json(await surveyModel.getSurveysSurveyBySurveysSurveyID(req.params.id));
+});
+
+router.post('/update/:id', async function (req, res) {
+    // TODO: Need a security fix
+    if (req.session.userid === undefined || !await userModel.validateUserBySessionData(req.session.userid)) {
+        res.status(403);
+        res.json({error: "Authorization Error"});
+        return;
+    }
+
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+        res.status(400);
+        res.json({error: "Invalid survey id!"});
+        return;
+    }
+
+    const survey = await surveyModel.getSurveysSurveyBySurveysSurveyID(req.params.id);
+
+    if (survey === []) {
+        res.status(400);
+        res.json({error: `Was not found the survey by id ${req.params.id}`});
+        return;
+    }
+
+    //TODO: create a surveysSurveyDAO class
+    //TODO: validate structure
+    const surveysSurveyDAO = {
+        _id: mongoose.Types.ObjectId(req.params.id), question: req.body.question, answers: Array.from(req.body.answers)
+    }
+
+    console.log(surveysSurveyDAO);
+    // TODO: validate is the survey belongs to the current user
+    res.json(await surveyModel.update(surveysSurveyDAO));
+});
 
 module.exports = {
     router
