@@ -19,20 +19,21 @@ async function getSurveyBySurveyId(surveyId) {
     }, {$group: {_id: "$surveys.survey"}}]);
 }
 
-async function getSurveysSurveyBySurveysSurveyID(surveysSurveyId) {
-    return config.userModel.aggregate([{$unwind: '$surveys'}, {$unwind: '$surveys.survey'}, {$match: {'surveys.survey._id': mongoose.Types.ObjectId(surveysSurveyId)}}, {
-        $project: {
-            "login": false, "password": false, "_id": false,
-        }
-    }, {$group: {_id: "$surveys.survey"}}]);
+async function getSurveyById(surveysSurveyId) {
+    return config.userModel.aggregate([{$unwind: '$surveys'}, {$unwind: '$surveys.inquirer'},
+        {$match: {'surveys._id': mongoose.Types.ObjectId(surveysSurveyId)}}, {
+            $project: {
+                "login": false, "password": false, "_id": false,
+            }
+        }, {$group: {_id: "$surveys.inquirer"}}]);
 }
 
 async function getAll() {
-    return await config.userModel.aggregate([{$unwind: '$surveys'}, {$unwind: '$surveys.survey'}, {
+    return await config.userModel.aggregate([{$unwind: '$surveys'}, {$unwind: '$surveys.inquirer'}, {
         $project: {
             "login": false, "password": false, "_id": false,
         }
-    }, {$group: {_id: "$surveys._id", "surveys": {$addToSet: "$surveys.survey"}}}])
+    }, {$group: {_id: "$surveys._id", "inquirer": {$addToSet: "$surveys.inquirer"}}}])
 }
 
 async function remove(surveyId) {
@@ -51,5 +52,5 @@ async function update(surveyDAO) {
 }
 
 module.exports = {
-    createSurvey, getAll, getSurveyBySurveyId, remove, update, getSurveysSurveyBySurveysSurveyID
+    createSurvey, getAll, getSurveyBySurveyId, remove, update, getSurveyById
 }

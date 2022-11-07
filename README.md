@@ -37,11 +37,11 @@ Survey site
 ```
 
 **Creating a new survey**
-`POST:`  `/api/users/login`
+`POST:`  `/api/survey/create`
 
 ```json
 {
-  "surveys": [
+  "inquirer": [
     {
       "question": "Question 1",
       "answers": [
@@ -75,6 +75,6 @@ Survey site
 Requires an empty body. Expected JSON response  
 
 **Getting survey by id**
-`POST:`  `/api/survey/id/:id`  
+`POST:`  `/api/survey/get/:id`  
 **ID MUST BE MONGODB ObjectId**  
 Requires an empty body. Expected JSON response  

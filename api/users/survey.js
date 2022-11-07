@@ -100,7 +100,7 @@ router.post('/remove/:id', async function (req, res) {
     res.json(await surveyModel.remove(req.params.id));
 });
 
-router.post('/survey/:id', async function (req, res) {
+router.post('/get/:id', async function (req, res) {
     // TODO: Need a security fix
     if (req.session.userid === undefined || !await userModel.validateUserBySessionData(req.session.userid)) {
         res.status(403);
@@ -115,7 +115,7 @@ router.post('/survey/:id', async function (req, res) {
     }
 
     // TODO: validate is the survey belongs to the current user
-    res.json(await surveyModel.getSurveysSurveyBySurveysSurveyID(req.params.id));
+    res.json(await surveyModel.getSurveyById(req.params.id));
 });
 
 router.post('/update/:id', async function (req, res) {
