@@ -1,16 +1,16 @@
 const config = require("../config/database").config;
 const {mongoose} = require('mongoose');
 
-async function addUser(userDAO, callback) {
-    return callback(await config.userModel.collection.insertOne(userDAO));
+async function addUser(userDAO) {
+    return await config.userModel.collection.insertOne(userDAO);
 }
 
-async function getUser(userDAO, callback) {
-    return callback(await config.userModel.find({
+async function getUser(userDAO) {
+    return await config.userModel.find({
         $and: [{
             "login": `${userDAO.login}`, "password": `${userDAO.password}`
         }]
-    }));
+    });
 }
 
 async function validateUserBySessionData(userId) {

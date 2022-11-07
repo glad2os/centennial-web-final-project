@@ -21,21 +21,6 @@ class config {
             }]
         });
 
-        // todo: implement to the Survey CRUD
-        // creating a new user with survey
-
-        /*
-        await mongoose.model('User', userScheme).collection.insertOne({
-            login: "test", password: "ahjsdaokjhdaokd", surveys: [{
-                _id: new mongoose.Types.ObjectId(),
-                question: "Test question",
-                answers: ["one", "two", "three"]
-            }, {
-                question: "Test question 2",
-                answers: ["one", "two", "three"]
-            }]
-        }) */
-
         // todo: implement to the Statistics CRUD
         // creating a new statistics with specified survey
         // await mongoose.model('Statistics', statisticsScheme).collection.insertOne({

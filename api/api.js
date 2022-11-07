@@ -2,8 +2,8 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
 
-// const users = require('./users/user');
-// const contacts = require('./contacts/contact');
+const users = require('./users/user');
+const survey = require('./users/survey');
 
 const config = require("../config/database").config;
 
@@ -15,8 +15,8 @@ try {
 }
 
 router.use(express.json());
-// router.use("/users", users.router);
-// router.use("/contacts", contacts.router);
+router.use("/users", users.router);
+router.use("/survey", survey.router);
 
 router.post('/', function (req, res) {
     res.json({version: process.env.npm_package_version, application: "back-end"});

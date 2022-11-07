@@ -1,8 +1,8 @@
 let mongoose = require("mongoose");
 
 class userDAO {
-    static of(id, login, password, surveys) {
-        return new userDAO(mongoose.Types.ObjectId(id), login, password, surveys);
+    static of(login, password, surveys = null) {
+        return new userDAO(login, password, surveys);
     }
 
     constructor(login, password, surveys) {
