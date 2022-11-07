@@ -14,16 +14,9 @@ try {
     throw err;
 }
 
-try {
-    config.initialize().then(() => {});
-    console.log('MongoDB connected')
-} catch (err) {
-    throw err;
-}
-
 router.use(express.json());
-router.use("/users", users.router);
-router.use("/contacts", contacts.router);
+// router.use("/users", users.router);
+// router.use("/contacts", contacts.router);
 
 router.post('/', function (req, res) {
     res.json({version: process.env.npm_package_version, application: "back-end"});

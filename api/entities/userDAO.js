@@ -1,15 +1,15 @@
 let mongoose = require("mongoose");
 
-class ProductDAO {
-    static of(id, name, description, price) {
-        return new ProductDAO(mongoose.Types.ObjectId(id), name, description, price);
+class userDAO {
+    static of(id, login, password, surveys) {
+        return new userDAO(mongoose.Types.ObjectId(id), login, password, surveys);
     }
 
-    constructor(name, description, price) {
-        this.name = name;
-        this.description = description;
-        this.price = price;
+    constructor(login, password, surveys) {
+        this.login = login;
+        this.password = password;
+        this.surveys = surveys;
     }
 }
 
-module.exports = ProductDAO
+module.exports = userDAO
