@@ -10,7 +10,13 @@ class config {
 
         const userScheme = new mongoose.Schema({
             login: String, password: String, surveys: [{
-                _id: mongoose.Schema.ObjectId, question: String, answers: [String]
+                _id: mongoose.Schema.ObjectId, inquirer: [
+                    {
+                        _id: mongoose.Schema.ObjectId,
+                        question: String,
+                        answers: [String]
+                    }
+                ]
             }], statistics: [
                 {
                     _surveyId: mongoose.Schema.ObjectId, surveyAnswers: [Number]

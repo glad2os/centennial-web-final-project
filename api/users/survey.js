@@ -13,16 +13,16 @@ router.post('/create', async function (req, res) {
         return;
     }
 
-    let surveys = req.body.surveys;
+    let inquirer = req.body.inquirer;
 
-    if (!surveys) {
+    if (!inquirer) {
         res.status(400);
         res.json({error: "No data found!"});
         return;
     }
 
     try {
-        surveys.forEach(survey => {
+        inquirer.forEach(survey => {
             if (!survey.hasOwnProperty("question") || !survey.hasOwnProperty("answers")) {
                 throw "Error data format!"
             }
@@ -33,7 +33,7 @@ router.post('/create', async function (req, res) {
         return;
     }
 
-    surveys = surveys.map(v => ({_id: new mongoose.Types.ObjectId(), ...v})).map(value => {
+    inquirer = inquirer.map(v => ({_id: new mongoose.Types.ObjectId(), ...v})).map(value => {
         return {
             _id: value._id,
             question: value.question,
@@ -42,7 +42,7 @@ router.post('/create', async function (req, res) {
     })
 
     const user = await userModel.getUserById(req.session.userid);
-    let newSurvey = await surveyModel.createSurvey(user._id, surveys);
+    let newSurvey = await surveyModel.createSurvey(user._id, inquirer);
 
     res.json(newSurvey);
 });
