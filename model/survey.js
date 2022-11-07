@@ -1,15 +1,15 @@
 const {config} = require("../config/database");
 const {mongoose} = require("mongoose");
 
-async function createSurvey(userid, statisticsDAO, callback){
-    return callback(await config.userModel.collection.updateOne({_id: mongoose.Types.ObjectId(userid)}, {
+async function createSurvey(userid, survey){
+    return await config.userModel.collection.updateOne({_id: mongoose.Types.ObjectId(userid)}, {
         $push: {
             "surveys": {
                 "_id": new mongoose.Types.ObjectId(),
-                statisticsDAO
+                survey
             }
         }
-    }, {multi: true}));
+    }, {multi: true});
 }
 
 module.exports = {
