@@ -1,14 +1,12 @@
 const express = require('express');
 
-const md5 = require('md5');
 const userModel = require("../../model/user");
 const surveyModel = require("../../model/survey");
-const userDAO = require("../entities/userDAO");
 const mongoose = require("mongoose");
-const {Error} = require("mongoose");
 const router = express.Router();
 
 router.post('/create', async function (req, res) {
+    // TODO: Need a security fix
     if (req.session.userid === undefined || !await userModel.validateUserBySessionData(req.session.userid)) {
         res.status(403);
         res.json({error: "Authorization Error"});
@@ -47,6 +45,34 @@ router.post('/create', async function (req, res) {
     let newSurvey = await surveyModel.createSurvey(user._id, surveys);
 
     res.json(newSurvey);
+});
+
+router.post('/getall', async function (req, res) {
+    // TODO: Need a security fix
+    if (req.session.userid === undefined || !await userModel.validateUserBySessionData(req.session.userid)) {
+        res.status(403);
+        res.json({error: "Authorization Error"});
+        return;
+    }
+
+    res.json(await surveyModel.getAll());
+});
+
+router.post('/id/:id', async function (req, res) {
+    // TODO: Need a security fix
+    if (req.session.userid === undefined || !await userModel.validateUserBySessionData(req.session.userid)) {
+        res.status(403);
+        res.json({error: "Authorization Error"});
+        return;
+    }
+
+    if(!mongoose.Types.ObjectId.isValid(req.params.id)){
+        res.status(400);
+        res.json({error: "Invalid survey id!"});
+        return;
+    }
+
+    res.json(await surveyModel.getSurveyBySurveyId(req.params.id));
 });
 
 module.exports = {
