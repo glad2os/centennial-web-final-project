@@ -69,3 +69,12 @@ Survey site
   ]
 }
 ```
+
+**Getting all surveys**
+`POST:`  `/api/survey/getall`  
+Requires an empty body. Expected JSON response  
+
+**Getting survey by id**
+`POST:`  `api/survey/id/:id`  
+**ID MUST BE MONGODB ObjectId**  
+Requires an empty body. Expected JSON response  

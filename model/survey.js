@@ -24,7 +24,7 @@ async function getAll() {
         $project: {
             "login": false, "password": false, "_id": false,
         }
-    }, {$group: {_id: "$surveys._id", "surveys": {$addToSet: "$surveys"}}}])
+    }, {$group: {_id: "$surveys._id", "surveys": {$addToSet: "$surveys.survey"}}}])
 }
 
 module.exports = {
