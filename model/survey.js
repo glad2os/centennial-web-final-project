@@ -27,6 +27,13 @@ async function getAll() {
     }, {$group: {_id: "$surveys._id", "surveys": {$addToSet: "$surveys.survey"}}}])
 }
 
+async function remove(surveyId){
+    return await config.userModel.updateMany(
+        { },
+        { $pull: { "surveys": {"_id": mongoose.Types.ObjectId(surveyId)}} }
+    );
+}
+
 module.exports = {
-    createSurvey, getAll, getSurveyBySurveyId
+    createSurvey, getAll, getSurveyBySurveyId, remove
 }

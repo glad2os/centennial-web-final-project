@@ -66,7 +66,7 @@ router.post('/id/:id', async function (req, res) {
         return;
     }
 
-    if(!mongoose.Types.ObjectId.isValid(req.params.id)){
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
         res.status(400);
         res.json({error: "Invalid survey id!"});
         return;
@@ -74,6 +74,31 @@ router.post('/id/:id', async function (req, res) {
 
     res.json(await surveyModel.getSurveyBySurveyId(req.params.id));
 });
+
+router.post('/remove/:id', async function (req, res) {
+    // TODO: Need a security fix
+    if (req.session.userid === undefined || !await userModel.validateUserBySessionData(req.session.userid)) {
+        res.status(403);
+        res.json({error: "Authorization Error"});
+        return;
+    }
+
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+        res.status(400);
+        res.json({error: "Invalid survey id!"});
+        return;
+    }
+
+    const survey = await surveyModel.getSurveyBySurveyId(req.params.id);
+    if (survey === []) {
+        res.status(400);
+        res.json({error: `Was not found the survey by id ${req.params.id}`});
+        return;
+    }
+
+    res.json(await surveyModel.remove(req.params.id));
+});
+
 
 module.exports = {
     router
