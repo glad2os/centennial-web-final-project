@@ -11,21 +11,23 @@ async function createSurvey(userid, survey) {
     }, {multi: true});
 }
 
-async function getSurveyBySurveyId(surveyId) {
-    return config.userModel.aggregate([{$unwind: '$surveys'}, {$unwind: '$surveys.survey'}, {$match: {'surveys._id': mongoose.Types.ObjectId(surveyId)}}, {
-        $project: {
-            "login": false, "password": false, "_id": false,
-        }
-    }, {$group: {_id: "$surveys.survey"}}]);
-}
-
-async function getSurveyById(surveysSurveyId) {
+async function getSurveyById(surveysId) {
     return config.userModel.aggregate([{$unwind: '$surveys'}, {$unwind: '$surveys.inquirer'},
-        {$match: {'surveys._id': mongoose.Types.ObjectId(surveysSurveyId)}}, {
+        {$match: {'surveys._id': mongoose.Types.ObjectId(surveysId)}}, {
             $project: {
                 "login": false, "password": false, "_id": false,
             }
         }, {$group: {_id: "$surveys.inquirer"}}]);
+}
+
+async function getInquirerById(inquirerId){
+    return config.userModel.aggregate([
+        {$unwind: '$surveys'},
+        {$unwind: '$surveys.inquirer'},
+        {$match: {"surveys.inquirer._id": mongoose.Types.ObjectId(inquirerId)}},
+        {$project: {_id: false, login: false, password: false}},
+        {$group: {_id: "$surveys.inquirer"}}
+    ])
 }
 
 async function getAll() {
@@ -40,17 +42,21 @@ async function remove(surveyId) {
     return await config.userModel.updateMany({}, {$pull: {"surveys": {"_id": mongoose.Types.ObjectId(surveyId)}}});
 }
 
-async function update(surveyDAO) {
-    //TODO: fix
-    return await config.userModel.updateMany({
-        "surveys.survey._id": mongoose.Types.ObjectId(surveyDAO._id),
-    }, {
-        $set: {
-            "surveys.survey.$.question": surveyDAO.question, "surveys.survey.$.answers": surveyDAO.answers,
-        }
-    });
+async function inquirerUpdate(surveyId, inquirerId) {
+
+    let inquirer = await config.userModel.findById({
+        "_id": mongoose.Types.ObjectId("636924c33f365433c8a89cd8"),
+        "surveys._id": mongoose.Types.ObjectId("63692b8dda87c344d03dae3d"),
+        "surveys.inquirer._id": mongoose.Types.ObjectId("63692b8dda87c344d03dae39")
+    },  { "surveys.inquirer.$[1]": true});
+
+    if (inquirer === null){
+        return undefined;
+    }
+
+    return inquirer;
 }
 
 module.exports = {
-    createSurvey, getAll, getSurveyBySurveyId, remove, update, getSurveyById
+    createSurvey, getAll, remove, inquirerUpdate, getSurveyById, getInquirerById
 }

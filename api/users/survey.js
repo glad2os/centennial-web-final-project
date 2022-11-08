@@ -58,7 +58,7 @@ router.post('/getall', async function (req, res) {
     res.json(await surveyModel.getAll());
 });
 
-router.post('/id/:id', async function (req, res) {
+router.post('/inquirer/:id', async function (req, res) {
     // TODO: Need a security fix
     if (req.session.userid === undefined || !await userModel.validateUserBySessionData(req.session.userid)) {
         res.status(403);
@@ -72,7 +72,7 @@ router.post('/id/:id', async function (req, res) {
         return;
     }
 
-    res.json(await surveyModel.getSurveyBySurveyId(req.params.id));
+    res.json(await surveyModel.getInquirerById(req.params.id));
 });
 
 router.post('/remove/:id', async function (req, res) {
@@ -89,7 +89,7 @@ router.post('/remove/:id', async function (req, res) {
         return;
     }
 
-    const survey = await surveyModel.getSurveyBySurveyId(req.params.id);
+    const survey = await surveyModel.getSurveyById(req.params.id);
     if (survey === []) {
         res.status(400);
         res.json({error: `Was not found the survey by id ${req.params.id}`});
@@ -118,37 +118,20 @@ router.post('/get/:id', async function (req, res) {
     res.json(await surveyModel.getSurveyById(req.params.id));
 });
 
-router.post('/update/:id', async function (req, res) {
+router.post('/get/:s_id/update/inquirer/:i_id', async function (req, res) {
     // TODO: Need a security fix
-    if (req.session.userid === undefined || !await userModel.validateUserBySessionData(req.session.userid)) {
-        res.status(403);
-        res.json({error: "Authorization Error"});
-        return;
-    }
+    // if (req.session.userid === undefined || !await userModel.validateUserBySessionData(req.session.userid)) {
+    //     res.status(403);
+    //     res.json({error: "Authorization Error"});
+    //     return;
+    // }
 
-    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+    if (mongoose.Types.ObjectId.isValid(req.params.s_id) || mongoose.Types.ObjectId.isValid(req.params.i_id)) {
+        res.json(await surveyModel.inquirerUpdate(req.params.s_id, req.params.i_id));
+    } else {
         res.status(400);
         res.json({error: "Invalid survey id!"});
-        return;
     }
-
-    const survey = await surveyModel.getSurveysSurveyBySurveysSurveyID(req.params.id);
-
-    if (survey === []) {
-        res.status(400);
-        res.json({error: `Was not found the survey by id ${req.params.id}`});
-        return;
-    }
-
-    //TODO: create a surveysSurveyDAO class
-    //TODO: validate structure
-    const surveysSurveyDAO = {
-        _id: mongoose.Types.ObjectId(req.params.id), question: req.body.question, answers: Array.from(req.body.answers)
-    }
-
-    console.log(surveysSurveyDAO);
-    // TODO: validate is the survey belongs to the current user
-    res.json(await surveyModel.update(surveysSurveyDAO));
 });
 
 module.exports = {
