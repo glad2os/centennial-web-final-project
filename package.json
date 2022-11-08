@@ -17,14 +17,17 @@
     "debug": "~2.6.9",
     "ejs": "^3.1.8",
     "express": "~4.16.1",
+    "express-session": "^1.17.3",
     "http-errors": "~1.6.3",
     "mini-css-extract-plugin": "^2.6.1",
+    "mongoose": "^6.7.1",
     "morgan": "~1.9.1",
     "sass": "^1.56.0",
     "sass-loader": "^13.1.0",
     "webpack-merge": "^5.8.0"
   },
   "devDependencies": {
+    "md5": "^2.3.0",
     "webpack-cli": "^4.10.0"
   }
 }
