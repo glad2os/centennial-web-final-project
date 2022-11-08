@@ -54,6 +54,21 @@ async function inquirerUpdate(surveyId, inquirerId, newInquirer) {
     });
 }
 
+
+async function inquirerDelete(surveyId, inquirerId) {
+    return await config.userModel.updateOne({}, {
+        $pull: {
+            "surveys.$[surveys].inquirer": {
+                "_id": mongoose.Types.ObjectId(inquirerId)
+            }
+        }
+    }, {
+        arrayFilters: [{
+            "surveys._id": mongoose.Types.ObjectId(surveyId)
+        }]
+    })
+}
+
 module.exports = {
-    createSurvey, getAll, remove, inquirerUpdate, getSurveyById, getInquirerById
+    createSurvey, getAll, remove, inquirerUpdate, getSurveyById, getInquirerById, inquirerDelete
 }

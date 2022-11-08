@@ -101,7 +101,7 @@ Requires an empty body. Expected JSON response
 <hr>
 
 **Updating inquirer fields by survey and inquirer ids**  
-`POST:` `http://localhost:3000/api/survey/get/:surveyID/update/inquirer/:inquirerID`  
+`POST:` `/api/survey/get/:surveyID/update/inquirer/:inquirerID`  
 Example: `http://localhost:3000/api/survey/get/63692b8dda87c344d03dae3d/update/inquirer/63692b8dda87c344d03dae3a`  
 **IDS MUST BE MONGODB ObjectId**  
 Body json request:  
@@ -117,4 +117,10 @@ Body json request:
   }
 }
 ```
+<hr>
 
+**Deleting inquirer field by survey and inquirer ids**  
+`POST:` `/api/survey/get/:surveyID/delete/inquirer/:inquirerID`  
+Example: `http://localhost:3000/api/survey/get/63692b8dda87c344d03dae3d/delete/inquirer/63692b8dda87c344d03dae3b`  
+**IDS MUST BE MONGODB ObjectId**  
+Requires an empty body. Expected JSON response

@@ -146,6 +146,28 @@ router.post('/get/:s_id/update/inquirer/:i_id', async function (req, res) {
     }
 });
 
+router.post('/get/:s_id/delete/inquirer/:i_id', async function (req, res) {
+    // TODO: Need a security fix
+    if (req.session.userid === undefined || !await userModel.validateUserBySessionData(req.session.userid)) {
+        res.status(403);
+        res.json({error: "Authorization Error"});
+        return;
+    }
+
+    try {
+        if (!(mongoose.Types.ObjectId.isValid(req.params.s_id) || mongoose.Types.ObjectId.isValid(req.params.i_id))) {
+            throw "ids are not a ObjectId!";
+        }
+
+        // TODO: validate is the survey belongs to the current user
+        res.json(await surveyModel.inquirerDelete(req.params.s_id, req.params.i_id, req.body.inquirer));
+    } catch (e) {
+        res.status(400);
+        res.json({error: e});
+    }
+});
+
+
 module.exports = {
     router
 }
