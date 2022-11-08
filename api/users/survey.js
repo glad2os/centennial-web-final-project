@@ -35,9 +35,7 @@ router.post('/create', async function (req, res) {
 
     inquirer = inquirer.map(v => ({_id: new mongoose.Types.ObjectId(), ...v})).map(value => {
         return {
-            _id: value._id,
-            question: value.question,
-            answers: Array.from(value.answers)
+            _id: value._id, question: value.question, answers: Array.from(value.answers)
         }
     })
 
@@ -120,17 +118,31 @@ router.post('/get/:id', async function (req, res) {
 
 router.post('/get/:s_id/update/inquirer/:i_id', async function (req, res) {
     // TODO: Need a security fix
-    // if (req.session.userid === undefined || !await userModel.validateUserBySessionData(req.session.userid)) {
-    //     res.status(403);
-    //     res.json({error: "Authorization Error"});
-    //     return;
-    // }
+    if (req.session.userid === undefined || !await userModel.validateUserBySessionData(req.session.userid)) {
+        res.status(403);
+        res.json({error: "Authorization Error"});
+        return;
+    }
 
-    if (mongoose.Types.ObjectId.isValid(req.params.s_id) || mongoose.Types.ObjectId.isValid(req.params.i_id)) {
-        res.json(await surveyModel.inquirerUpdate(req.params.s_id, req.params.i_id));
-    } else {
+    try {
+        if (!(mongoose.Types.ObjectId.isValid(req.params.s_id) || mongoose.Types.ObjectId.isValid(req.params.i_id))) {
+            throw "ids are not a ObjectId!";
+        }
+        let inquirer = req.body.inquirer;
+
+        if (!inquirer) {
+            throw "Can not find the inquirer!";
+        }
+
+        if (!inquirer.hasOwnProperty("question") || !inquirer.hasOwnProperty("answers")) {
+            throw "Error data format!"
+        }
+
+        // TODO: validate is the survey belongs to the current user
+        res.json(await surveyModel.inquirerUpdate(req.params.s_id, req.params.i_id, req.body.inquirer));
+    } catch (e) {
         res.status(400);
-        res.json({error: "Invalid survey id!"});
+        res.json({error: e});
     }
 });
 
