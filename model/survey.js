@@ -54,6 +54,7 @@ async function inquirerUpdate(surveyId, inquirerId, newInquirer) {
     });
 }
 
+
 async function inquirerDelete(surveyId, inquirerId) {
     return await config.userModel.updateOne({}, {
         $pull: {

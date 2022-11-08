@@ -124,6 +124,3 @@ Body json request:
 Example: `http://localhost:3000/api/survey/get/63692b8dda87c344d03dae3d/delete/inquirer/63692b8dda87c344d03dae3b`  
 **IDS MUST BE MONGODB ObjectId**  
 Requires an empty body. Expected JSON response
-
-
-
