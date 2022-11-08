@@ -11,45 +11,49 @@ async function createSurvey(userid, survey) {
     }, {multi: true});
 }
 
-async function getSurveyBySurveyId(surveyId) {
-    return config.userModel.aggregate([{$unwind: '$surveys'}, {$unwind: '$surveys.survey'}, {$match: {'surveys._id': mongoose.Types.ObjectId(surveyId)}}, {
+async function getSurveyById(surveysId) {
+    return config.userModel.aggregate([{$unwind: '$surveys'}, {$unwind: '$surveys.inquirer'}, {$match: {'surveys._id': mongoose.Types.ObjectId(surveysId)}}, {
         $project: {
             "login": false, "password": false, "_id": false,
         }
-    }, {$group: {_id: "$surveys.survey"}}]);
+    }, {$group: {_id: "$surveys.inquirer"}}]);
 }
 
-async function getSurveysSurveyBySurveysSurveyID(surveysSurveyId) {
-    return config.userModel.aggregate([{$unwind: '$surveys'}, {$unwind: '$surveys.survey'}, {$match: {'surveys.survey._id': mongoose.Types.ObjectId(surveysSurveyId)}}, {
+async function getInquirerById(inquirerId) {
+    return config.userModel.aggregate([{$unwind: '$surveys'}, {$unwind: '$surveys.inquirer'}, {$match: {"surveys.inquirer._id": mongoose.Types.ObjectId(inquirerId)}}, {
         $project: {
-            "login": false, "password": false, "_id": false,
+            _id: false, login: false, password: false
         }
-    }, {$group: {_id: "$surveys.survey"}}]);
+    }, {$group: {_id: "$surveys.inquirer"}}])
 }
 
 async function getAll() {
-    return await config.userModel.aggregate([{$unwind: '$surveys'}, {$unwind: '$surveys.survey'}, {
+    return await config.userModel.aggregate([{$unwind: '$surveys'}, {$unwind: '$surveys.inquirer'}, {
         $project: {
             "login": false, "password": false, "_id": false,
         }
-    }, {$group: {_id: "$surveys._id", "surveys": {$addToSet: "$surveys.survey"}}}])
+    }, {$group: {_id: "$surveys._id", "inquirer": {$addToSet: "$surveys.inquirer"}}}])
 }
 
 async function remove(surveyId) {
     return await config.userModel.updateMany({}, {$pull: {"surveys": {"_id": mongoose.Types.ObjectId(surveyId)}}});
 }
 
-async function update(surveyDAO) {
-    //TODO: fix
-    return await config.userModel.updateMany({
-        "surveys.survey._id": mongoose.Types.ObjectId(surveyDAO._id),
-    }, {
+async function inquirerUpdate(surveyId, inquirerId, newInquirer) {
+    return await config.userModel.updateOne({}, {
         $set: {
-            "surveys.survey.$.question": surveyDAO.question, "surveys.survey.$.answers": surveyDAO.answers,
+            "surveys.$[surveys].inquirer.$[inquirer].question": newInquirer.question,
+            "surveys.$[surveys].inquirer.$[inquirer].answers": Array.from(newInquirer.answers)
         }
+    }, {
+        arrayFilters: [{
+            "surveys._id": mongoose.Types.ObjectId(surveyId)
+        }, {
+            "inquirer._id": mongoose.Types.ObjectId(inquirerId)
+        }]
     });
 }
 
 module.exports = {
-    createSurvey, getAll, getSurveyBySurveyId, remove, update, getSurveysSurveyBySurveysSurveyID
+    createSurvey, getAll, remove, inquirerUpdate, getSurveyById, getInquirerById
 }

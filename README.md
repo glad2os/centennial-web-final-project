@@ -6,15 +6,20 @@ Survey site
 - [Api requests](#api)
 
 ## Stack
+
 **Developing**
+
 - Express
 - Webpack
 - SCSS
 
 **Deployment**
+
 - Docker
 
 ## Api
+
+### User requests
 
 **Creating a new user**  
 `POST:`  `/api/users/register`
@@ -26,6 +31,8 @@ Survey site
 }
 ```
 
+<hr>
+
 **Log in**  
 `POST:`  `/api/users/login`
 
@@ -36,12 +43,14 @@ Survey site
 }
 ```
 
-**Creating a new survey**
-`POST:`  `/api/users/login`
+### Survey requests
 
+**Creating a new survey**
+`POST:`  `/api/survey/create`  
+Body json request: 
 ```json
 {
-  "surveys": [
+  "inquirer": [
     {
       "question": "Question 1",
       "answers": [
@@ -70,11 +79,42 @@ Survey site
 }
 ```
 
+<hr>
+
 **Getting all surveys**
 `POST:`  `/api/survey/getall`  
-Requires an empty body. Expected JSON response  
+Requires an empty body. Expected JSON response
+<hr>
 
-**Getting survey by id**
-`POST:`  `/api/survey/id/:id`  
-**ID MUST BE MONGODB ObjectId**  
-Requires an empty body. Expected JSON response  
+**Getting survey by id**  
+`POST:`  `/api/survey/get/:id`  
+Example: `http://localhost:3000/api/survey/get/63699270d4ab440bfe8a578a`  
+**ID MUST BE MONGODB ObjectId**    
+Requires an empty body. Expected JSON response
+<hr>
+
+**Getting inquirer by inquirer id**  
+`POST:`  `/api/survey/inquirer/:id`  
+Example: `http://localhost:3000/api/survey/inquirer/63692b8dda87c344d03dae3a`  
+**ID MUST BE MONGODB ObjectId**    
+Requires an empty body. Expected JSON response
+<hr>
+
+**Updating inquirer fields by survey and inquirer ids**  
+`POST:` `http://localhost:3000/api/survey/get/:surveyID/update/inquirer/:inquirerID`  
+Example: `http://localhost:3000/api/survey/get/63692b8dda87c344d03dae3d/update/inquirer/63692b8dda87c344d03dae3a`  
+**IDS MUST BE MONGODB ObjectId**  
+Body json request:  
+```json
+{
+  "inquirer": {
+    "question": "New question",
+    "answers": [
+      "1",
+      "2",
+      "3"
+    ]
+  }
+}
+```
+
