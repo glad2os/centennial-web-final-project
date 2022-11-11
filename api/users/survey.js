@@ -51,8 +51,6 @@ router.post('/getall', async function (req, res) {
 
 router.post('/inquirer/:id', async function (req, res, next) {
     try {
-        let userToken = await verifyAccessToken(req.body.token);
-
         if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
             throw new dataFormat();
         }
@@ -87,15 +85,12 @@ router.post('/remove/:id', async function (req, res, next) {
 
 router.post('/get/:id', async function (req, res, next) {
     try {
-        let userToken = await verifyAccessToken(req.body.token);
-
         if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
             throw new dataFormat();
         }
 
         // TODO: validate is the survey belongs to the current user
         res.json(await surveyModel.getSurveyById(req.params.id));
-
     } catch (e) {
         next(e);
     }
