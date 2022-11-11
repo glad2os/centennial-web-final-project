@@ -1,5 +1,3 @@
-let mongoose = require("mongoose");
-
 class userDAO {
     static of(login, password, surveys = null) {
         return new userDAO(login, password, surveys);

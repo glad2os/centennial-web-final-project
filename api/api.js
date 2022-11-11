@@ -8,7 +8,8 @@ const survey = require('./users/survey');
 const config = require("../config/database").config;
 
 try {
-    config.initialize().then(() => {});
+    config.initialize().then(() => {
+    });
     console.log('MongoDB connected')
 } catch (err) {
     throw err;
