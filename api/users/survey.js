@@ -3,46 +3,49 @@ const express = require('express');
 const userModel = require("../../model/user");
 const surveyModel = require("../../model/survey");
 const mongoose = require("mongoose");
+const jwt = require("jsonwebtoken");
+const {noDataFound} = require("../../exceptions/noDataFound");
+const {JsonWebTokenError} = require("../../exceptions/jsonWebTokenError");
+const {dataFormat} = require("../../exceptions/dataFormat");
+const {emptyException} = require("../../exceptions/emptyException");
 const router = express.Router();
 
-router.post('/create', async function (req, res) {
-    // TODO: Need a security fix
-    if (req.session.userid === undefined || !await userModel.validateUserBySessionData(req.session.userid)) {
-        res.status(403);
-        res.json({error: "Authorization Error"});
-        return;
-    }
+async function verifyAccessToken(token) {
+    return jwt.verify(token, process.env.TOKEN_SECRET);
+}
 
-    let inquirer = req.body.inquirer;
-
-    if (!inquirer) {
-        res.status(400);
-        res.json({error: "No data found!"});
-        return;
-    }
+router.post('/create', async function (req, res, next) {
 
     try {
+        let userToken = await verifyAccessToken(req.body.token);
+
+        let inquirer = req.body.inquirer;
+
+        if (!inquirer) {
+            throw new noDataFound();
+        }
+
         inquirer.forEach(survey => {
             if (!survey.hasOwnProperty("question") || !survey.hasOwnProperty("answers")) {
-                throw "Error data format!"
+                throw new dataFormat();
             }
         })
+
+
+        inquirer = inquirer.map(v => ({_id: new mongoose.Types.ObjectId(), ...v})).map(value => {
+            return {
+                _id: value._id, question: value.question, answers: Array.from(value.answers)
+            }
+        })
+
+        const user = await userModel.getUserById(req.session.userid);
+        let newSurvey = await surveyModel.createSurvey(user._id, inquirer);
+
+        res.json(newSurvey);
     } catch (e) {
-        res.status(400);
-        res.json({error: e});
-        return;
+
+        next(e);
     }
-
-    inquirer = inquirer.map(v => ({_id: new mongoose.Types.ObjectId(), ...v})).map(value => {
-        return {
-            _id: value._id, question: value.question, answers: Array.from(value.answers)
-        }
-    })
-
-    const user = await userModel.getUserById(req.session.userid);
-    let newSurvey = await surveyModel.createSurvey(user._id, inquirer);
-
-    res.json(newSurvey);
 });
 
 router.post('/getall', async function (req, res) {
