@@ -7,6 +7,7 @@ const userDAO = require("../entities/userDAO");
 const router = express.Router();
 
 const jwt = require('jsonwebtoken');
+const {invalidCredentials} = require("../../exceptions/invalidCredentials");
 
 function generateAccessToken(username) {
     return jwt.sign({username: username}, process.env.TOKEN_SECRET, {expiresIn: '7d'});
@@ -33,18 +34,21 @@ router.post('/register', async function (req, res) {
     res.end();
 });
 
-router.post('/login', async function (req, res) {
-    let user = await userModel.getUser(userDAO.of(req.body.login, md5(req.body.password)));
+router.post('/login', async function (req, res, next) {
+    try {
+        let user = await userModel.getUser(userDAO.of(req.body.login, md5(req.body.password)));
 
-    if (user[0] !== undefined && user[0].login.length > 0) {
+        if (user[0] !== undefined && user[0].login.length > 0) {
 
-        let token = generateAccessToken(user[0]._id);
+            let token = generateAccessToken(user[0]._id);
 
-        res.status(200);
-        res.json({token: token});
-    } else {
-        res.status(403);
-        res.json({error: "Invalid credentials"});
+            res.status(200);
+            res.json({token: token});
+        } else {
+            throw new invalidCredentials();
+        }
+    } catch (e) {
+        next(e);
     }
 });
 
