@@ -27,7 +27,6 @@ app.use(function (err, req, res, next) {
         error = new JsonWebTokenError();
     }
 
-
     res.status(error.status);
     res.json({error: error.message});
 });
