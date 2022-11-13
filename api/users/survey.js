@@ -24,6 +24,10 @@ router.post('/create', async function (req, res, next) {
             throw new noDataFound();
         }
 
+        if (!req.body.topic) {
+            throw new noDataFound();
+        }
+
         inquirer.forEach(survey => {
             if (!survey.hasOwnProperty("question") || !survey.hasOwnProperty("answers")) {
                 throw new dataFormat();
@@ -37,7 +41,7 @@ router.post('/create', async function (req, res, next) {
         })
 
         const user = await userModel.getUserById(userToken.username);
-        let newSurvey = await surveyModel.createSurvey(user._id, inquirer);
+        let newSurvey = await surveyModel.createSurvey(user._id, req.body.topic, inquirer);
 
         res.json(newSurvey);
     } catch (e) {

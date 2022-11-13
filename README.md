@@ -56,6 +56,7 @@ Body json request:
 ```json
 {
   "token": "...eyj6s6mSolD32kXbefBA",
+  "topic": "A new topic of the survey",
   "inquirer": [
     {
       "question": "Question 1",
@@ -144,5 +145,7 @@ Example: `http://localhost:3000/api/survey/get/63692b8dda87c344d03dae3d/delete/i
 Body json request:
 
 ```json
+{
   "token": "...eyj6s6mSolD32kXbefBA"
+}
  ```

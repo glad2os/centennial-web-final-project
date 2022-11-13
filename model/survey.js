@@ -1,11 +1,13 @@
 const {config} = require("../config/database");
 const {mongoose} = require("mongoose");
 
-async function createSurvey(userid, survey) {
+async function createSurvey(userid, topic, survey) {
     return await config.userModel.collection.updateOne({_id: mongoose.Types.ObjectId(userid)}, {
         $push: {
             "surveys": {
-                "_id": new mongoose.Types.ObjectId(), inquirer: survey
+                "_id": new mongoose.Types.ObjectId(),
+                "topic" : topic,
+                inquirer: survey
             }
         }
     }, {multi: true});
@@ -30,9 +32,10 @@ async function getInquirerById(inquirerId) {
 async function getAll() {
     return await config.userModel.aggregate([{$unwind: '$surveys'}, {$unwind: '$surveys.inquirer'}, {
         $project: {
-            "login": false, "password": false, "_id": false,
+            "login": false, "password": false, "_id": false
         }
-    }, {$group: {_id: "$surveys._id", "inquirer": {$addToSet: "$surveys.inquirer"}}}])
+    }, {$group: {_id: "$surveys._id", "topic": {$addToSet: "$surveys.topic"},
+            "inquirer": {$addToSet: "$surveys.inquirer"}}}])
 }
 
 async function remove(surveyId) {
