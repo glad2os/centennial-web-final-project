@@ -19,6 +19,8 @@ Survey site
 
 ## Api
 
+**ID MUST BE MONGODB ObjectId**
+
 ### User requests
 
 **Creating a new user**  
@@ -43,13 +45,18 @@ Survey site
 }
 ```
 
+Returning a `token` for further API usage
+
 ### Survey requests
 
 **Creating a new survey**
 `POST:`  `/api/survey/create`  
-Body json request: 
+Body json request:
+
 ```json
 {
+  "token": "...eyj6s6mSolD32kXbefBA",
+  "topic": "A new topic of the survey",
   "inquirer": [
     {
       "question": "Question 1",
@@ -89,24 +96,36 @@ Requires an empty body. Expected JSON response
 **Getting survey by id**  
 `POST:`  `/api/survey/get/:id`  
 Example: `http://localhost:3000/api/survey/get/63699270d4ab440bfe8a578a`  
-**ID MUST BE MONGODB ObjectId**    
 Requires an empty body. Expected JSON response
 <hr>
+
+**Removing survey by id**  
+`POST:` `/api/survey/remove/:id`  
+Example: `http://localhost:3000/api/survey/remove/636ebcd7439e14d84d154873`  
+Body json request:
+
+```json
+{
+  "token": "...eyj6s6mSolD32kXbefBA"
+}
+```
+
+<hr>  
 
 **Getting inquirer by inquirer id**  
 `POST:`  `/api/survey/inquirer/:id`  
 Example: `http://localhost:3000/api/survey/inquirer/63692b8dda87c344d03dae3a`  
-**ID MUST BE MONGODB ObjectId**    
 Requires an empty body. Expected JSON response
 <hr>
 
 **Updating inquirer fields by survey and inquirer ids**  
 `POST:` `/api/survey/get/:surveyID/update/inquirer/:inquirerID`  
 Example: `http://localhost:3000/api/survey/get/63692b8dda87c344d03dae3d/update/inquirer/63692b8dda87c344d03dae3a`  
-**IDS MUST BE MONGODB ObjectId**  
-Body json request:  
+Body json request:
+
 ```json
 {
+  "token": "...eyj6s6mSolD32kXbefBA",
   "inquirer": {
     "question": "New question",
     "answers": [
@@ -117,10 +136,16 @@ Body json request:
   }
 }
 ```
+
 <hr>
 
 **Deleting inquirer field by survey and inquirer ids**  
 `POST:` `/api/survey/get/:surveyID/delete/inquirer/:inquirerID`  
 Example: `http://localhost:3000/api/survey/get/63692b8dda87c344d03dae3d/delete/inquirer/63692b8dda87c344d03dae3b`  
-**IDS MUST BE MONGODB ObjectId**  
-Requires an empty body. Expected JSON response
+Body json request:
+
+```json
+{
+  "token": "...eyj6s6mSolD32kXbefBA"
+}
+ ```
