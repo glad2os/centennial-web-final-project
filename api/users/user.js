@@ -6,32 +6,45 @@ const userDAO = require("../entities/userDAO");
 
 const router = express.Router();
 
-const jwt = require('jsonwebtoken');
+const {verifyAccessToken, generateAccessToken} = require("../jwt");
 const {invalidCredentials} = require("../../exceptions/invalidCredentials");
+const {getUserById} = require("../../model/user");
 
-function generateAccessToken(username) {
-    return jwt.sign({username: username}, process.env.TOKEN_SECRET, {expiresIn: '7d'});
-}
 
-router.post('/register', async function (req, res) {
-    const user = userDAO.of(req.body.login, md5(req.body.password), []);
-    let parseUser = await userModel.getUser(user, []);
+router.post('/token', async function (req, res, next) {
+    try {
+        const userToken = await verifyAccessToken(req.body.token);
+        const userById = await getUserById(userToken.username);
 
-    if (parseUser.length !== 0) {
-        res.status(400);
+        res.json({username: userById.login});
+    } catch (e) {
+        next(e);
+    }
+});
+
+router.post('/register', async function (req, res, next) {
+    try {
+        const user = userDAO.of(req.body.login, md5(req.body.password), []);
+        let parseUser = await userModel.getUser(user, []);
+
+        if (parseUser.length !== 0) {
+            res.status(400);
+            res.end();
+            return;
+        }
+
+        let newUser = await userModel.addUser(user);
+
+        if (newUser.insertedId && newUser.acknowledged) {
+            res.status(200);
+        } else {
+            res.status(400);
+        }
+
         res.end();
-        return;
+    } catch (e) {
+        next(e);
     }
-
-    let newUser = await userModel.addUser(user);
-
-    if (newUser.insertedId && newUser.acknowledged) {
-        res.status(200);
-    } else {
-        res.status(400);
-    }
-
-    res.end();
 });
 
 router.post('/login', async function (req, res, next) {
