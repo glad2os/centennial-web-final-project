@@ -1,0 +1,42 @@
+body {
+  display: flex;
+}
+
+body.home {
+  position: relative;
+  width: 1920px;
+  height: 1080px;
+
+  background: radial-gradient(50% 50% at 50% 50%, rgba(255, 76, 80, 0.69) 0%, #FF7477 0.01%, #FF4C50 100%);
+
+  .survey-svg {
+    display: flex;
+    background: url("/images/flat-color-icons-survey.svg");
+    position: absolute;
+    width: 525px;
+    height: 525px;
+    left: 312px;
+    top: 277px;
+  }
+
+  .text {
+    &:hover {
+      cursor: pointer;
+      text-shadow: 1px 1px 8px #795859;
+    }
+
+    position: absolute;
+    /* width: 760px; */
+    /* height: 258px; */
+    left: 776px;
+    top: 411px;
+    font-family: "Inter", serif;
+    font-style: normal;
+    font-weight: 800;
+    font-size: 107px;
+    line-height: 129px;
+    text-align: center;
+    color: #FFFFFF;
+    text-shadow: 1px 1px 10px #795859;
+  }
+}

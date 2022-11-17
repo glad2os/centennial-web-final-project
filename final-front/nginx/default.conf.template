@@ -1,0 +1,32 @@
+server {
+      root /usr/share/nginx/html/;
+
+      index templates/index.html;
+
+      location / {
+        try_files $uri $uri/ @rewrites;
+      }
+
+      location @rewrites {
+        rewrite ^(.+)$ /templates/$1.html last;
+      }
+
+      location /images/ {
+        include  /etc/nginx/mime.types;
+        try_files $uri $uri/ /images/default.png;
+      }
+
+
+      location ~* \.(?:ico|css|js)$ {
+        include  /etc/nginx/mime.types;
+        expires max;
+        add_header Pragma public;
+        add_header Cache-Control "public, must-revalidate, proxy-revalidate";
+      }
+
+      location ~ /api {
+          proxy_set_header Host $host;
+          proxy_set_header X-Real-IP $remote_addr;
+          proxy_pass ${BACKEND_HOST};
+      }
+    }
