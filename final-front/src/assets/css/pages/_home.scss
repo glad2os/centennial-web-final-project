@@ -18,13 +18,8 @@ body.home {
   background: radial-gradient(50% 50% at 50% 50%, rgba(255, 76, 80, 0.69) 0%, #FF7477 0.01%, #FF4C50 100%);
 
   .nav-menu {
-
     display: inline-flex;
     flex-direction: row;
-
-    p {
-      margin: 0 50px;
-    }
   }
 
   .home-wrapper {
@@ -54,9 +49,7 @@ body.home {
       line-height: 129px;
       text-align: center;
       color: #FFFFFF;
-      text-shadow: 1px 1px 10px #795859;
+      //text-shadow: 1px 1px 10px #795859;
     }
   }
-
-
 }

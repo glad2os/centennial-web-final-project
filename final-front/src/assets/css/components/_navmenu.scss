@@ -6,6 +6,10 @@
     flex-direction: row;
   }
   .button {
+    p {
+      margin: 0 50px;
+    }
+
     user-select: none;
     font-family: 'Inter', serif;
     font-style: normal;
@@ -49,6 +53,8 @@
     justify-content: left;
 
     .logo {
+      user-select: none;
+
       color: $color;
       font-family: 'Inter', serif;
       font-style: normal;
@@ -77,7 +83,8 @@
     }
   }
   .right {
-    margin-left: 312px;
     justify-content: right;
+    display: flex;
+    flex: 1;
   }
 }

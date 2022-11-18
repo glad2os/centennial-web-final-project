@@ -1,0 +1,11 @@
+body.create {
+
+  color: #FFFFFF;
+  flex-direction: column;
+
+  background-color: #212121;
+
+  .nav-menu {
+    @include menu(#ffffff, #FF4C50);
+  }
+}
