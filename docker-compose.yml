@@ -1,19 +1,35 @@
-version: '3.1'
+version: '3.9'
 services:
   mongo:
     image: mongo
+    container_name: final-mongodb
     restart: always
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: root
 
-  express:
+  backend:
     build: .
+    container_name: final-backend
     restart: always
-    ports:
-      - "80:80"
+    expose:
+      - "8080"
     environment:
       DB_HOST: "mongodb://root:root@mongo:27017"
       NODE_ENV: "production"
-      PORT: "80"
-      SECRET: "she0eeLurujiez5KKew8YiS6"
+      PORT: "8080"
+      TOKEN_SECRET: "she0eeLurujiez5KKew8YiS6"
+
+  nginx:
+    container_name: final-nginx
+    build:
+      context: final-front/
+      dockerfile: Dockerfile
+    environment:
+      BACKEND_HOST: "http://backend:8080"
+    volumes:
+      - ./final-front/dist:/usr/share/nginx/html
+      - ./final-front/src/templates:/usr/share/nginx/html/templates
+      - ./final-front/images/:/usr/share/nginx/html/images
+    ports:
+      - "3030:80"

@@ -134,3 +134,5 @@ dist
 # Webpack build
 !/public/images
 public
+
+# Front-end

@@ -3,16 +3,10 @@ const express = require('express');
 const userModel = require("../../model/user");
 const surveyModel = require("../../model/survey");
 const mongoose = require("mongoose");
-const jwt = require("jsonwebtoken");
 const {noDataFound} = require("../../exceptions/noDataFound");
-const {JsonWebTokenError} = require("../../exceptions/jsonWebTokenError");
 const {dataFormat} = require("../../exceptions/dataFormat");
-const {emptyException} = require("../../exceptions/emptyException");
 const router = express.Router();
-
-async function verifyAccessToken(token) {
-    return jwt.verify(token, process.env.TOKEN_SECRET);
-}
+const {verifyAccessToken} = require("../jwt");
 
 router.post('/create', async function (req, res, next) {
     try {
