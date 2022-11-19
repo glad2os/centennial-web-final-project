@@ -1,42 +1,55 @@
 body {
   display: flex;
+  padding: 0;
 }
 
 body.home {
+  .nav-menu {
+    @include menu(#ffffff, #ffffff);
+  }
+
+  overflow-y: hidden;
+  overflow-x: hidden;
+  flex-direction: column;
   position: relative;
-  width: 1920px;
-  height: 1080px;
+  width: 100vw;
+  height: 100vh;
 
   background: radial-gradient(50% 50% at 50% 50%, rgba(255, 76, 80, 0.69) 0%, #FF7477 0.01%, #FF4C50 100%);
 
-  .survey-svg {
-    display: flex;
-    background: url("/images/flat-color-icons-survey.svg");
-    position: absolute;
-    width: 525px;
-    height: 525px;
-    left: 312px;
-    top: 277px;
+  .nav-menu {
+    display: inline-flex;
+    flex-direction: row;
   }
 
-  .text {
-    &:hover {
-      cursor: pointer;
-      text-shadow: 1px 1px 8px #795859;
+  .home-wrapper {
+    user-select: none;
+    display: flex;
+    flex-direction: row;
+    height: 100vh;
+    justify-content: center;
+    align-items: center;
+
+    .survey-svg {
+      background: url("/images/flat-color-icons-survey.svg");
+      width: 525px;
+      height: 525px;
     }
 
-    position: absolute;
-    /* width: 760px; */
-    /* height: 258px; */
-    left: 776px;
-    top: 411px;
-    font-family: "Inter", serif;
-    font-style: normal;
-    font-weight: 800;
-    font-size: 107px;
-    line-height: 129px;
-    text-align: center;
-    color: #FFFFFF;
-    text-shadow: 1px 1px 10px #795859;
+    .text {
+      &:hover {
+        cursor: pointer;
+        text-shadow: 1px 1px 8px #795859;
+      }
+
+      font-family: "Inter", serif;
+      font-style: normal;
+      font-weight: 800;
+      font-size: 107px;
+      line-height: 129px;
+      text-align: center;
+      color: #FFFFFF;
+      //text-shadow: 1px 1px 10px #795859;
+    }
   }
 }

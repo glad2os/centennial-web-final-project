@@ -18,7 +18,7 @@ services:
       DB_HOST: "mongodb://root:root@mongo:27017"
       NODE_ENV: "production"
       PORT: "8080"
-      SECRET: "she0eeLurujiez5KKew8YiS6"
+      TOKEN_SECRET: "she0eeLurujiez5KKew8YiS6"
 
   nginx:
     container_name: final-nginx

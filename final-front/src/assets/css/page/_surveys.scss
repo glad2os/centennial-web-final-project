@@ -1,0 +1,72 @@
+body.surveys {
+  background-color: #212121;
+
+  flex-direction: column;
+
+  .nav-menu {
+    @include menu(#ffffff, #FF4C50);
+  }
+
+  .surveys-wrapper {
+    justify-content: center;
+    margin: 30px 400px 0 400px;
+
+    .survey {
+      display: flex;
+      flex-direction: row;
+
+      padding: 25px;
+
+      &:not(:first-child) {
+        margin-top: 20px;
+      }
+
+      background-color: #636060;
+      border-radius: 33px;
+      color: #FFFFFF;
+      height: 184px;
+
+      .title {
+        display: flex;
+        font-size: 30px;
+        text-align: justify;
+        word-wrap: anywhere;
+      }
+
+      .comments {
+        margin: 50px;
+
+        display: flex;
+        flex-direction: row;
+        justify-content: right;
+        flex: 1;
+
+        .dislike {
+          background-repeat: no-repeat;
+          background-image: url("http://localhost:3030/images/dislike.svg");
+          height: 64px;
+          width: 64px;
+
+          &:hover {
+            opacity: 0.5;
+            cursor: pointer;
+          }
+        }
+
+        .like {
+          margin-left: 30px;
+          background-repeat: no-repeat;
+          background-image: url("http://localhost:3030/images/like.svg");
+          height: 64px;
+          width: 64px;
+
+          &:hover {
+            opacity: 0.5;
+            cursor: pointer;
+          }
+        }
+      }
+    }
+
+  }
+}

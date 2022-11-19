@@ -1,0 +1,90 @@
+@mixin menu($color, $underline) {
+  display: flex;
+
+  .buttons {
+    display: flex;
+    flex-direction: row;
+  }
+  .button {
+    p {
+      margin: 0 50px;
+    }
+
+    user-select: none;
+    font-family: 'Inter', serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 30px;
+    line-height: 36px;
+
+    color: $color;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+    &.active {
+      p {
+        display: flex;
+        flex-direction: column;
+      }
+
+      p:after {
+        position: relative;
+        content: '';
+        height: 2.54px;
+        bottom: 3px;
+        background: $underline;
+      }
+    }
+
+    &:hover {
+      cursor: pointer;
+
+      p {
+        padding: 2px;
+        font-size: 28px;
+      }
+    }
+  }
+
+  .left {
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+
+    .logo {
+      user-select: none;
+
+      color: $color;
+      font-family: 'Inter', serif;
+      font-style: normal;
+      font-weight: 600;
+      font-size: 30px;
+      line-height: 36px;
+
+      .underline {
+        align-items: flex-start;
+        display: flex;
+        flex-direction: column;
+
+        p {
+          display: flex;
+          flex-direction: column;
+        }
+
+        p::before {
+          position: relative;
+          content: '';
+          height: 5px;
+          top: 3px;
+          background: $underline;
+        }
+      }
+    }
+  }
+  .right {
+    justify-content: right;
+    display: flex;
+    flex: 1;
+  }
+}
