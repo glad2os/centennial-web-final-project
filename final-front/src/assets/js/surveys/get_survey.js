@@ -46,6 +46,7 @@ async function get_survey() {
             answerField.insertAdjacentElement('beforeend', label);
             answers.insertAdjacentElement('beforeend', answerField);
         }
+
         surveyQuestion.insertAdjacentElement('beforeend', question);
         surveyQuestion.insertAdjacentElement('beforeend', answers);
         survey.insertAdjacentElement('beforeend', surveyQuestion);
@@ -66,23 +67,75 @@ async function get_survey() {
         back.onclick = () => {
             current--;
             Array.from(document.querySelectorAll('.survey-wrapper>.survey')).forEach(value => value.style.display = 'none')
-            let prevQuestion = document.querySelectorAll('.survey-wrapper>.survey')[mod(current, response.length)];
+            let nextIndex = mod(current, response.length + 1);
+            let prevQuestion = document.querySelectorAll('.survey-wrapper>.survey')[nextIndex];
             prevQuestion.style.display = 'flex';
+            if (Array.from(document.querySelectorAll('.survey-wrapper>.survey')).length - nextIndex === 1) updateSubmitForm();
         }
 
         next.onclick = () => {
             current++;
             Array.from(document.querySelectorAll('.survey-wrapper>.survey')).forEach(value => value.style.display = 'none')
-            let prevQuestion = document.querySelectorAll('.survey-wrapper>.survey')[mod(current, response.length)];
+            let nextIndex = mod(current, response.length + 1);
+            let prevQuestion = document.querySelectorAll('.survey-wrapper>.survey')[nextIndex];
             prevQuestion.style.display = 'flex';
+            if (Array.from(document.querySelectorAll('.survey-wrapper>.survey')).length - nextIndex === 1) updateSubmitForm();
+        }
+
+
+        function updateSubmitForm() {
+            let answers = [];
+
+            const finishSurvey = document.querySelector('#finishSurvey');
+            finishSurvey.innerHTML = '';
+
+            console.log(finishSurvey.innerHTML)
+            Array.from(document.querySelectorAll('input')).filter(it => it.checked).forEach(it => {
+                let obj = {
+                    question: it.parentNode.parentNode.parentNode.children[0].innerText,
+                    answer: it.parentNode.children[1].innerText
+                }
+                answers.push(obj);
+            });
+
+            if (answers.length > 0) {
+                answers.forEach(value => {
+                    finishSurvey.insertAdjacentHTML('afterbegin', `<div>Question: ${value.question} | answer : ${value.answer}</div>`)
+                })
+            }
         }
 
         survey.insertAdjacentElement('beforeend', nav);
-
         document.querySelector('.survey-wrapper').insertAdjacentElement('afterbegin', survey);
-
     });
 
+    let finishSurvey = document.createElement('div');
+    finishSurvey.classList.add('survey');
+    finishSurvey.style.display = 'none';
+
+    let nav = document.createElement('div');
+    nav.classList.add('nav');
+    let undo = document.createElement('div');
+    let submit = document.createElement('div');
+    undo.classList.add('button');
+    undo.innerText = "UNDO";
+    submit.classList.add('button');
+    submit.innerText = "SUBMIT";
+
+    nav.insertAdjacentElement('beforeend', undo);
+    nav.insertAdjacentElement('beforeend', submit);
+
+    undo.onclick = () => {
+        current--;
+        Array.from(document.querySelectorAll('.survey-wrapper>.survey')).forEach(value => value.style.display = 'none')
+        let prevQuestion = document.querySelectorAll('.survey-wrapper>.survey')[mod(current, response.length + 1)];
+        prevQuestion.style.display = 'flex';
+    }
+
+    finishSurvey.insertAdjacentHTML('afterbegin', `<div id="finishSurvey"></div>`);
+    finishSurvey.insertAdjacentElement('beforeend', nav);
+
+    document.querySelector('.survey-wrapper').insertAdjacentElement('beforeend', finishSurvey);
     document.querySelectorAll('.survey-wrapper>.survey')[0].style.display = 'flex';
 }
 
