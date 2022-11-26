@@ -82,14 +82,12 @@ async function get_survey() {
             if (Array.from(document.querySelectorAll('.survey-wrapper>.survey')).length - nextIndex === 1) updateSubmitForm();
         }
 
-
         function updateSubmitForm() {
             let answers = [];
 
             const finishSurvey = document.querySelector('#finishSurvey');
             finishSurvey.innerHTML = '';
 
-            console.log(finishSurvey.innerHTML)
             Array.from(document.querySelectorAll('input')).filter(it => it.checked).forEach(it => {
                 let obj = {
                     question: it.parentNode.parentNode.parentNode.children[0].innerText,
