@@ -7,6 +7,10 @@ server {
         try_files $uri $uri/ /templates/$1.html /templates/404.html;
     }
 
+    location ^~ /survey/ {
+        try_files $uri /templates/survey.html;
+    }
+
     location /images/ {
       try_files $uri $uri/ /images/default.png;
     }

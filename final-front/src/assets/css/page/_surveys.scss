@@ -7,11 +7,61 @@ body.surveys {
     @include menu(#ffffff, #FF4C50);
   }
 
+  .survey-wrapper {
+    margin: 30px 400px 0 400px;
+
+    .survey {
+      .question{
+        font-size: 2rem;
+        margin-bottom: 2rem;
+      }
+      .surveyQuestion-wrapper {
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+      }
+
+      .nav {
+        display: flex;
+        justify-content: space-around;
+
+        user-select: none;
+        .back, .next, .button {
+          background-color: #FF4C50;
+          padding: 5px 25px;
+          border-radius: 33px;
+          text-transform: uppercase;
+          font-weight: bold;
+
+          &:hover {
+            cursor: pointer;
+            opacity: 0.9;
+          }
+        }
+      }
+
+      display: flex;
+      flex-direction: column;
+      background-color: #636060;
+      border-radius: 33px;
+      color: #FFFFFF;
+      min-height: 600px;
+      padding: 25px;
+    }
+  }
+
   .surveys-wrapper {
     justify-content: center;
     margin: 30px 400px 0 400px;
 
+
     .survey {
+      &:hover {
+        cursor: pointer;
+        opacity: 0.9;
+      }
+
+
       display: flex;
       flex-direction: row;
 
