@@ -1,23 +1,29 @@
-# centennial web final Project
-
-Survey site
+# Centennial web final Project
+## Survey site
 
 - [Stack technologies](#stack)
 - [Api requests](#api)
 
 ## Stack
 
-**Developing**
-
+**Backend**
 - Express
+- jsonwebtoken
+
+**Front-end**
 - Webpack
 - SCSS
+- JS
+- Nginx (web server)
 
-**Deployment**
-
-- Docker
+**Database**
+- MongoDB 6.0.2
 
 ## Api
+
+**Deployment**
+- Docker
+- Docker-compose
 
 **ID MUST BE MONGODB ObjectId**
 

@@ -1,8 +1,16 @@
-import {postData} from "../functions";
-
-const surveysWrapper = document.querySelector('.surveys-wrapper');
+import {getUserByToken, postData} from "../functions";
+import {getCookie} from "../cookies";
 
 async function get_survey() {
+
+    let cookie = getCookie('token');
+    const user = await getUserByToken(cookie);
+
+    if (cookie && user.username) {
+        let right = document.querySelector('.nav-menu .right');
+        right.innerHTML = `<div class="button">${user.username}</div>`
+    }
+
     const data = await postData("/survey/get/" + window.location.pathname.slice('/survey/'.length));
     const response = Array.from(await data.json()).map(value => value._id);
 

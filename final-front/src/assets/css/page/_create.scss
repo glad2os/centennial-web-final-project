@@ -8,4 +8,73 @@ body.create {
   .nav-menu {
     @include menu(#ffffff, #FF4C50);
   }
+
+  .create-wrapper {
+    justify-content: center;
+    margin: 30px 400px 0 400px;
+
+    .survey {
+      .label-wrapper {
+        max-width: fit-content;
+        display: flex;
+        flex-direction: column;
+        align-items: end;
+        font-size: 30px;
+
+        .nav {
+          img {
+            margin-top: 5px;
+
+            &:hover {
+              cursor: pointer;
+            }
+          }
+
+          img:not(:first-child) {
+            margin-left: 10px;
+          }
+        }
+
+        span {
+          &::before {
+            background-image: url("/images/submit.svg");
+            display: inline-flex;
+            position: relative;
+            content: '';
+            width: 32px;
+            height: 32px;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+            left: 53px;
+            top: 10px;
+            z-index: 1000;
+          }
+
+          &:hover {
+            cursor: pointer;
+          }
+        }
+
+        input {
+          margin-left: 15px;
+          text-transform: uppercase;
+          background-color: #636060;
+          color: #FFFFFF;
+          padding: 5px 0 5px 40px;
+          border-radius: 25px;
+          width: 500px;
+          height: 26px;
+        }
+      }
+
+      display: flex;
+      flex-direction: column;
+      background-color: #636060;
+      border-radius: 33px;
+      color: #FFFFFF;
+      min-height: 600px;
+      padding: 25px;
+    }
+  }
 }
