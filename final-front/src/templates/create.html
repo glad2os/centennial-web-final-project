@@ -27,8 +27,19 @@
     </div>
 </div>
 <div class="create-wrapper">
-    <div class="survey-svg"></div>
-    <div class="text" onclick="window.location.href='/create'">CREATE FIRST SURVEY</div>
+    <div class="survey">
+        <div class="label-wrapper">
+            <label id="topicLabel">
+                Topic Name:
+                <input id="topic" type="text">
+            </label>
+            <label id="questionsLabel">
+                Amount of questions:
+                <span><input class="submit" id="questions" type="text"></span>
+            </label>
+        </div>
+    </div>
 </div>
+<script src="/public.js"></script>
 </body>
 </html>
