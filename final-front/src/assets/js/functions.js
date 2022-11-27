@@ -13,6 +13,12 @@ async function postData(url = '', data = {}) {
     });
 }
 
+async function getUserByToken(token) {
+    const data = postData('/users/token', {"token": token});
+    return (await data).json();
+}
+
 export {
-    postData
+    postData,
+    getUserByToken
 }
