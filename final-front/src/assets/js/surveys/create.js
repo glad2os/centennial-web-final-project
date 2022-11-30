@@ -1,22 +1,13 @@
-import {getCookie} from "../cookies";
-import {getUserByToken} from "../functions";
-
 export async function create() {
-    let cookie = getCookie('token');
-    const user = await getUserByToken(cookie);
-
-    if (cookie && user.username) {
-        let right = document.querySelector('.nav-menu .right');
-        right.innerHTML = `<div class="button">${user.username}</div>`
-    }
-
     let labelWrapper = document.querySelector('.label-wrapper');
     let questions = document.getElementById('questions');
     let topic = document.getElementById('topic');
     let oldData = Date.now();
     let questionCounter = 0;
     let answerCounter = 0;
-
+    let survey = {
+        inquirer: []
+    }
     questions.onkeyup = (function (event) {
 
         if (event.key === "Enter") {
@@ -25,7 +16,7 @@ export async function create() {
             if ((eventTime - oldData) / 1000 <= 1.1) {
                 console.log(`spam detected: ${(eventTime - oldData) / 1000}`)
                 oldData = Date.now();
-//                return;
+                return;
             }
 
             if (isNaN(questions.value) || Number(questions.value) < 1) {
@@ -81,6 +72,37 @@ export async function create() {
                 labelWrapper.insertBefore(newAnswerLabel, nav);
             }
 
+            deploy.onclick = () => {
+                let flag = false;
+                if (questionCounter === Number(questions.value)) {
+                    flag = true;
+                }
+
+                let answers = [];
+                for (let i = 1; i <= answerCounter; i++) {
+                    let elem = document.getElementById(`answer${i}`);
+                    answers.push(elem.value);
+                    elem.parentElement.remove()
+                }
+
+                survey.inquirer.push({
+                    'question': document.getElementById(`question${questionCounter}`).value, 'answers': answers
+                });
+                answerCounter = 0;
+
+                if(!flag){
+                    document.getElementById(`question${questionCounter}`).parentElement.innerHTML = document.getElementById(`question${questionCounter}`).parentElement.innerHTML
+                        .replace(`#${questionCounter}`, questionCounter + 1);
+
+                    document.getElementById(`question${questionCounter}`).setAttribute('id', `question${questionCounter + 1}`);
+                    questionCounter++;
+                    return;
+                }
+
+                // TODO: implement sending to the backend
+                console.log(survey);
+                console.log("sending to the backend");
+            }
 
             labelWrapper.insertAdjacentElement('beforeend', questionNameLabel);
             labelWrapper.insertAdjacentElement('beforeend', answerNameLabel);
