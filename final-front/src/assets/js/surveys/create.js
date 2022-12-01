@@ -1,4 +1,12 @@
+import {log} from "debug";
+import {getCookie} from "../cookies";
+import {postData} from "../functions";
+
 export async function create() {
+    if (!getCookie('token')) {
+        window.location.href = '/signin'
+    }
+
     let labelWrapper = document.querySelector('.label-wrapper');
     let questions = document.getElementById('questions');
     let topic = document.getElementById('topic');
@@ -72,7 +80,7 @@ export async function create() {
                 labelWrapper.insertBefore(newAnswerLabel, nav);
             }
 
-            deploy.onclick = () => {
+            deploy.onclick = async () => {
                 let flag = false;
                 if (questionCounter === Number(questions.value)) {
                     flag = true;
@@ -90,7 +98,7 @@ export async function create() {
                 });
                 answerCounter = 0;
 
-                if(!flag){
+                if (!flag) {
                     document.getElementById(`question${questionCounter}`).parentElement.innerHTML = document.getElementById(`question${questionCounter}`).parentElement.innerHTML
                         .replace(`#${questionCounter}`, questionCounter + 1);
 
@@ -99,9 +107,17 @@ export async function create() {
                     return;
                 }
 
-                // TODO: implement sending to the backend
-                console.log(survey);
-                console.log("sending to the backend");
+                survey.token = localStorage.getItem('token');
+                survey.topic = topic.value;
+
+                const data = await postData('/survey/create', survey);
+                const response = await data.json();
+
+                if (response.error) {
+                    alert(response.error);
+                } else {
+                    alert("done!");
+                }
             }
 
             labelWrapper.insertAdjacentElement('beforeend', questionNameLabel);
@@ -109,5 +125,4 @@ export async function create() {
             labelWrapper.insertAdjacentElement('beforeend', nav);
         }
     });
-
 }
