@@ -1,13 +1,10 @@
+import {log} from "debug";
 import {getCookie} from "../cookies";
-import {getUserByToken} from "../functions";
+import {postData} from "../functions";
 
 export async function create() {
-    let cookie = getCookie('token');
-    const user = await getUserByToken(cookie);
-
-    if (cookie && user.username) {
-        let right = document.querySelector('.nav-menu .right');
-        right.innerHTML = `<div class="button">${user.username}</div>`
+    if (!getCookie('token')) {
+        window.location.href = '/signin'
     }
 
     let labelWrapper = document.querySelector('.label-wrapper');
@@ -16,7 +13,9 @@ export async function create() {
     let oldData = Date.now();
     let questionCounter = 0;
     let answerCounter = 0;
-
+    let survey = {
+        inquirer: []
+    }
     questions.onkeyup = (function (event) {
 
         if (event.key === "Enter") {
@@ -25,7 +24,7 @@ export async function create() {
             if ((eventTime - oldData) / 1000 <= 1.1) {
                 console.log(`spam detected: ${(eventTime - oldData) / 1000}`)
                 oldData = Date.now();
-//                return;
+                return;
             }
 
             if (isNaN(questions.value) || Number(questions.value) < 1) {
@@ -81,11 +80,49 @@ export async function create() {
                 labelWrapper.insertBefore(newAnswerLabel, nav);
             }
 
+            deploy.onclick = async () => {
+                let flag = false;
+                if (questionCounter === Number(questions.value)) {
+                    flag = true;
+                }
+
+                let answers = [];
+                for (let i = 1; i <= answerCounter; i++) {
+                    let elem = document.getElementById(`answer${i}`);
+                    answers.push(elem.value);
+                    elem.parentElement.remove()
+                }
+
+                survey.inquirer.push({
+                    'question': document.getElementById(`question${questionCounter}`).value, 'answers': answers
+                });
+                answerCounter = 0;
+
+                if (!flag) {
+                    document.getElementById(`question${questionCounter}`).parentElement.innerHTML = document.getElementById(`question${questionCounter}`).parentElement.innerHTML
+                        .replace(`#${questionCounter}`, questionCounter + 1);
+
+                    document.getElementById(`question${questionCounter}`).setAttribute('id', `question${questionCounter + 1}`);
+                    questionCounter++;
+                    return;
+                }
+
+                survey.token = localStorage.getItem('token');
+                survey.topic = topic.value;
+
+                const data = await postData('/survey/create', survey);
+                const response = await data.json();
+
+                if (response.error) {
+                    alert(response.error);
+                } else {
+                    alert("done!");
+                }
+            }
 
             labelWrapper.insertAdjacentElement('beforeend', questionNameLabel);
             labelWrapper.insertAdjacentElement('beforeend', answerNameLabel);
             labelWrapper.insertAdjacentElement('beforeend', nav);
         }
     });
-
 }

@@ -2,6 +2,7 @@ import {get_all_surveys} from "./surveys/get_all_surveys";
 import {get_survey} from "./surveys/get_survey";
 import {create} from "./surveys/create";
 import {signin, signup} from "./user/signin";
+import validateUser from "./user/validateUser";
 
 const href = window.location.href;
 
@@ -22,3 +23,5 @@ switch (true) {
         signup();
         break;
 }
+
+validateUser();

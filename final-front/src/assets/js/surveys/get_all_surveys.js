@@ -4,13 +4,7 @@ import {getCookie} from "../cookies";
 const surveysWrapper = document.querySelector('.surveys-wrapper');
 
 async function get_all_surveys() {
-    let cookie = getCookie('token');
-    const user = await getUserByToken(cookie);
 
-    if (cookie && user.username) {
-        let right = document.querySelector('.nav-menu .right');
-        right.innerHTML = `<div class="button">${user.username}</div>`
-    }
 
     const data = await postData("/survey/getall");
     const response = await data.json();
