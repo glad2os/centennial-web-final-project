@@ -91,9 +91,9 @@ body.surveys {
         justify-content: right;
         flex: 1;
 
-        .dislike {
+        .like {
           background-repeat: no-repeat;
-          background-image: url("http://localhost:3030/images/dislike.svg");
+          background-image: url("http://localhost:3030/images/like.svg");
           height: 64px;
           width: 64px;
 
@@ -103,10 +103,11 @@ body.surveys {
           }
         }
 
-        .like {
+        .remove {
           margin-left: 30px;
           background-repeat: no-repeat;
-          background-image: url("http://localhost:3030/images/like.svg");
+          background-image: url("http://localhost:3030/images/remove.svg");
+          background-size: contain;
           height: 64px;
           width: 64px;
 
