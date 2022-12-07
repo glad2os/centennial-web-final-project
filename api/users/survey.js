@@ -75,7 +75,7 @@ router.post('/remove/:id', async function (req, res, next) {
         }
 
         // TODO: validate is the survey belongs to the current user
-        res.json(await surveyModel.remove(req.params.id));
+        res.json(await surveyModel.remove(userToken.username, req.params.id));
     } catch (e) {
         next(e);
     }
@@ -113,7 +113,7 @@ router.post('/get/:s_id/update/inquirer/:i_id', async function (req, res, next) 
         }
 
         // TODO: validate is the survey belongs to the current user
-        res.json(await surveyModel.inquirerUpdate(req.params.s_id, req.params.i_id, req.body.inquirer));
+        res.json(await surveyModel.inquirerUpdate(userToken.username, req.params.s_id, req.params.i_id, req.body.inquirer));
     } catch (e) {
         next(e);
     }
@@ -128,7 +128,7 @@ router.post('/get/:s_id/delete/inquirer/:i_id', async function (req, res, next) 
         }
 
         // TODO: validate is the survey belongs to the current user
-        res.json(await surveyModel.inquirerDelete(req.params.s_id, req.params.i_id, req.body.inquirer));
+        res.json(await surveyModel.inquirerDelete(userToken.username, req.params.s_id, req.params.i_id, req.body.inquirer));
     } catch (e) {
         next(e);
     }

@@ -55,11 +55,15 @@ async function get_survey() {
         nav.classList.add('nav');
         let back = document.createElement('div');
         let next = document.createElement('div');
+        let update = document.createElement('div');
         back.classList.add('back');
         back.innerText = "back";
+        update.classList.add('update');
+        update.innerText = "update";
         next.classList.add('next');
         next.innerText = "next";
         nav.insertAdjacentElement('beforeend', back);
+        nav.insertAdjacentElement('beforeend', update);
         nav.insertAdjacentElement('beforeend', next);
 
         back.onclick = () => {
@@ -69,6 +73,11 @@ async function get_survey() {
             let prevQuestion = document.querySelectorAll('.survey-wrapper>.survey')[nextIndex];
             prevQuestion.style.display = 'flex';
             if (Array.from(document.querySelectorAll('.survey-wrapper>.survey')).length - nextIndex === 1) updateSubmitForm();
+        }
+
+        update.onclick = () => {
+            let surveyId  = window.location.pathname.slice('/survey/'.length);
+            window.location = `/update/${surveyId}/${it._id}`;
         }
 
         next.onclick = () => {
