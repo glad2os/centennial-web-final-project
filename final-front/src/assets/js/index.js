@@ -1,6 +1,7 @@
 import {get_all_surveys} from "./surveys/get_all_surveys";
 import {get_survey} from "./surveys/get_survey";
 import {create} from "./surveys/create";
+import {update} from "./surveys/update";
 import {signin, signup} from "./user/signin";
 import validateUser from "./user/validateUser";
 
@@ -22,6 +23,10 @@ switch (true) {
     case /signup/.test(href):
         signup();
         break;
+    case /update/.test(href): {
+        update();
+        break;
+    }
 }
 
 validateUser();

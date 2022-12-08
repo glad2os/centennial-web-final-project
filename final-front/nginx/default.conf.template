@@ -11,6 +11,10 @@ server {
         try_files $uri /templates/survey.html;
     }
 
+    location ^~ /update/ {
+        try_files $uri /templates/update.html;
+    }
+
     location /images/ {
       try_files $uri $uri/ /images/default.png;
     }
