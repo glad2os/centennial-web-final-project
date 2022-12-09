@@ -5,6 +5,7 @@ class config {
 
     static userModel;
     static statisticsModel;
+    static cachedStatistics;
 
     static async initialize() {
         await mongoose.connect(process.env.DB_HOST);
@@ -20,10 +21,14 @@ class config {
         const statisticsScheme = new mongoose.Schema({
             _inquirerId: mongoose.Schema.ObjectId, inquirerAnswers: Number, _userId: mongoose.Schema.ObjectId
         })
+
+        const cachedStatisticsScheme = new mongoose.Schema({});
+
         this.mongoose = mongoose;
 
         this.userModel = mongoose.model('User', userScheme);
         this.statisticsModel = mongoose.model('Statistics', statisticsScheme);
+        this.cachedStatistics = mongoose.model('cachedStatistics', cachedStatisticsScheme);
     }
 }
 

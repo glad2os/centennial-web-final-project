@@ -21,6 +21,7 @@ services:
       NODE_ENV: "production"
       PORT: "8080"
       TOKEN_SECRET: "she0eeLurujiez5KKew8YiS6"
+      UPDATE_CACHE_CRON: "0 12 * * *"
 
   nginx:
     container_name: final-nginx
