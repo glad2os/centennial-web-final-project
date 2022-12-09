@@ -145,7 +145,7 @@ router.post('/answer', async function (req, res, next) {
                 throw new noDataFound("no inquirer found!");
             }
 
-            response.push(await surveyModel.answerByInquirerId(userId, req.params.id, it.inquirerAnswers))
+            response.push(await surveyModel.answerByInquirerId(userId, it.inquirerId, it.inquirerAnswers))
         }
 
         res.json(response);
