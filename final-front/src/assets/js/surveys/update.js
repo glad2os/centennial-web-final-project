@@ -29,18 +29,21 @@ export async function update() {
             if (updatePrompt === 'update') {
                 try {
                     let data = JSON.parse(textarea.value);
+
                     if (localStorage.getItem('token') === null) {
                         throw "please sign in!";
                     }
+
                     let updatePromise = await postData(`/survey/get/${surveyId}/update/inquirer/${inquirerId}`, {
-                        "token": localStorage.getItem('token'), "inquirer": data
-                    });
+                        "token": localStorage.getItem('token'), "inquirer": data});
                     let jsonResponsePromise = await updatePromise.json();
+
                     if (jsonResponsePromise.error) {
                         alert(jsonResponsePromise.error)
                     }
-                    if (jsonResponsePromise.acknowledged) {
-                        alert("Done!");
+
+                    if (jsonResponsePromise.modifiedCount) {
+                        alert(`Done! Updated: ${jsonResponsePromise.modifiedCount}`);
                     }
                 } catch (e) {
                     alert(e);
