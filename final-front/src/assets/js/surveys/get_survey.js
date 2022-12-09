@@ -15,6 +15,9 @@ async function get_survey() {
 
     let current = 0;
 
+    const statistics = await postData("/statistics/info",{});
+    let statisticsJSON = await statistics.json();
+    statisticsJSON = statisticsJSON[0];
     response.forEach(it => {
         const survey = document.createElement('div');
         survey.classList.add("survey");
@@ -40,6 +43,16 @@ async function get_survey() {
             radio.name = `${it._id}`
             label.setAttribute('for', `${it._id}|${answersKey}`)
             label.innerText = it.answers[answersKey];
+
+            if(statisticsJSON.answers){
+                let statisticsObj = statisticsJSON.answers.find(id=> id.id === it._id)
+                    .statistics.find(it => it.id === Number(answersKey));
+
+                if(statisticsObj.count){
+                    label.innerText += ` (TOTAL: ${statisticsObj.count})`;
+                }
+            }
+
             answerField.insertAdjacentElement('beforeend', radio);
             answerField.insertAdjacentElement('beforeend', label);
             answers.insertAdjacentElement('beforeend', answerField);
