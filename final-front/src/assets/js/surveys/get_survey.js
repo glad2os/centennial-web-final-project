@@ -1,4 +1,4 @@
-import {postData} from "../functions";
+import {getUserByToken, postData} from "../functions";
 
 async function get_survey() {
     const data = await postData("/survey/get/" + window.location.pathname.slice('/survey/'.length));
@@ -76,7 +76,7 @@ async function get_survey() {
         }
 
         update.onclick = () => {
-            let surveyId  = window.location.pathname.slice('/survey/'.length);
+            let surveyId = window.location.pathname.slice('/survey/'.length);
             window.location = `/update/${surveyId}/${it._id}`;
         }
 
@@ -126,6 +126,42 @@ async function get_survey() {
     undo.innerText = "UNDO";
     submit.classList.add('button');
     submit.innerText = "SUBMIT";
+
+    submit.onclick = async () => {
+        let answersObj = [];
+
+        Array.from(document.querySelectorAll('input')).filter(it => it.checked).forEach(it => {
+            let obj = {
+                inquirerAnswers: it.parentNode.children[1].getAttribute('for').split("|")[1],
+                inquirerId: it.parentNode.children[1].getAttribute('for').split("|")[0]
+            }
+            answersObj.push(obj);
+        });
+
+        if (answersObj.length == 0) {
+            alert("Answers are empty!");
+            return;
+        }
+
+        let sendingJson = {};
+
+        if (localStorage.getItem('token')) {
+            const user = await getUserByToken(localStorage.getItem('token'));
+            if (user.id)
+                sendingJson.userId = user.id
+        }
+
+        sendingJson.data = answersObj;
+        let responsePromise = await postData('/survey/answer', sendingJson);
+        let r = await responsePromise.json();
+
+        if (r.error) {
+            alert(r.error);
+        } else {
+            alert("done!");
+            console.log(r);
+        }
+    }
 
     nav.insertAdjacentElement('beforeend', undo);
     nav.insertAdjacentElement('beforeend', submit);

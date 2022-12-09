@@ -13,6 +13,14 @@ async function createSurvey(userid, topic, survey) {
     }, {multi: true});
 }
 
+async function answerByInquirerId(userId, inquirerId, inquirerAnswers){
+    return config.statisticsModel.collection.insertOne({
+        _inquirerId: mongoose.Types.ObjectId(inquirerId),
+        inquirerAnswers: Number(inquirerAnswers),
+        _userId: mongoose.Types.ObjectId(userId)
+    });
+}
+
 async function getSurveyById(surveysId) {
     return config.userModel.aggregate([{$unwind: '$surveys'}, {$unwind: '$surveys.inquirer'}, {$match: {'surveys._id': mongoose.Types.ObjectId(surveysId)}}, {
         $project: {
@@ -80,5 +88,5 @@ async function inquirerDelete(userid, surveyId, inquirerId) {
 }
 
 module.exports = {
-    createSurvey, getAll, remove, inquirerUpdate, getSurveyById, getInquirerById, inquirerDelete
+    createSurvey, getAll, remove, inquirerUpdate, getSurveyById, getInquirerById, inquirerDelete, answerByInquirerId
 }
