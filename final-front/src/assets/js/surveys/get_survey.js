@@ -1,16 +1,6 @@
 import {getUserByToken, postData} from "../functions";
-import {getCookie} from "../cookies";
 
 async function get_survey() {
-
-    let cookie = getCookie('token');
-    const user = await getUserByToken(cookie);
-
-    if (cookie && user.username) {
-        let right = document.querySelector('.nav-menu .right');
-        right.innerHTML = `<div class="button">${user.username}</div>`
-    }
-
     const data = await postData("/survey/get/" + window.location.pathname.slice('/survey/'.length));
     const response = Array.from(await data.json()).map(value => value._id);
 
@@ -65,11 +55,15 @@ async function get_survey() {
         nav.classList.add('nav');
         let back = document.createElement('div');
         let next = document.createElement('div');
+        let update = document.createElement('div');
         back.classList.add('back');
         back.innerText = "back";
+        update.classList.add('update');
+        update.innerText = "update";
         next.classList.add('next');
         next.innerText = "next";
         nav.insertAdjacentElement('beforeend', back);
+        nav.insertAdjacentElement('beforeend', update);
         nav.insertAdjacentElement('beforeend', next);
 
         back.onclick = () => {
@@ -79,6 +73,11 @@ async function get_survey() {
             let prevQuestion = document.querySelectorAll('.survey-wrapper>.survey')[nextIndex];
             prevQuestion.style.display = 'flex';
             if (Array.from(document.querySelectorAll('.survey-wrapper>.survey')).length - nextIndex === 1) updateSubmitForm();
+        }
+
+        update.onclick = () => {
+            let surveyId = window.location.pathname.slice('/survey/'.length);
+            window.location = `/update/${surveyId}/${it._id}`;
         }
 
         next.onclick = () => {
@@ -127,6 +126,42 @@ async function get_survey() {
     undo.innerText = "UNDO";
     submit.classList.add('button');
     submit.innerText = "SUBMIT";
+
+    submit.onclick = async () => {
+        let answersObj = [];
+
+        Array.from(document.querySelectorAll('input')).filter(it => it.checked).forEach(it => {
+            let obj = {
+                inquirerAnswers: it.parentNode.children[1].getAttribute('for').split("|")[1],
+                inquirerId: it.parentNode.children[1].getAttribute('for').split("|")[0]
+            }
+            answersObj.push(obj);
+        });
+
+        if (answersObj.length == 0) {
+            alert("Answers are empty!");
+            return;
+        }
+
+        let sendingJson = {};
+
+        if (localStorage.getItem('token')) {
+            const user = await getUserByToken(localStorage.getItem('token'));
+            if (user.id)
+                sendingJson.userId = user.id
+        }
+
+        sendingJson.data = answersObj;
+        let responsePromise = await postData('/survey/answer', sendingJson);
+        let r = await responsePromise.json();
+
+        if (r.error) {
+            alert(r.error);
+        } else {
+            alert("done!");
+            console.log(r);
+        }
+    }
 
     nav.insertAdjacentElement('beforeend', undo);
     nav.insertAdjacentElement('beforeend', submit);

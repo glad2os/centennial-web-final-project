@@ -74,8 +74,7 @@ router.post('/remove/:id', async function (req, res, next) {
             throw new noDataFound();
         }
 
-        // TODO: validate is the survey belongs to the current user
-        res.json(await surveyModel.remove(req.params.id));
+        res.json(await surveyModel.remove(userToken.username, req.params.id));
     } catch (e) {
         next(e);
     }
@@ -87,7 +86,6 @@ router.post('/get/:id', async function (req, res, next) {
             throw new dataFormat();
         }
 
-        // TODO: validate is the survey belongs to the current user
         res.json(await surveyModel.getSurveyById(req.params.id));
     } catch (e) {
         next(e);
@@ -112,10 +110,47 @@ router.post('/get/:s_id/update/inquirer/:i_id', async function (req, res, next) 
             throw new dataFormat();
         }
 
-        // TODO: validate is the survey belongs to the current user
-        res.json(await surveyModel.inquirerUpdate(req.params.s_id, req.params.i_id, req.body.inquirer));
+        res.json(await surveyModel.inquirerUpdate(userToken.username, req.params.s_id, req.params.i_id, req.body.inquirer));
     } catch (e) {
         next(e);
+    }
+});
+
+router.post('/answer', async function (req, res, next) {
+    try {
+
+        let inquirerAnswers = req.body.data;
+
+        let userId = req.body.userId;
+
+        if (!(userId !== undefined && mongoose.Types.ObjectId.isValid(userId))) {
+            userId = new mongoose.Types.ObjectId();
+        }
+
+        let response = [];
+
+        for (let it of inquirerAnswers) {
+
+            if (isNaN(it.inquirerAnswers)) {
+                throw new dataFormat();
+            }
+
+            if (!(mongoose.Types.ObjectId.isValid(it.inquirerId))) {
+                throw new dataFormat();
+            }
+
+            let inquirer = await surveyModel.getInquirerById(it.inquirerId);
+
+            if (inquirer.length === 0) {
+                throw new noDataFound("no inquirer found!");
+            }
+
+            response.push(await surveyModel.answerByInquirerId(userId, it.inquirerId, it.inquirerAnswers))
+        }
+
+        res.json(response);
+    } catch (e) {
+        next(e)
     }
 });
 
@@ -127,8 +162,7 @@ router.post('/get/:s_id/delete/inquirer/:i_id', async function (req, res, next) 
             throw new dataFormat();
         }
 
-        // TODO: validate is the survey belongs to the current user
-        res.json(await surveyModel.inquirerDelete(req.params.s_id, req.params.i_id, req.body.inquirer));
+        res.json(await surveyModel.inquirerDelete(userToken.username, req.params.s_id, req.params.i_id, req.body.inquirer));
     } catch (e) {
         next(e);
     }

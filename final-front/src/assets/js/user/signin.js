@@ -1,5 +1,5 @@
 import {postData} from "../functions";
-import {getCookie, setCookie} from "../cookies";
+import {setCookie} from "../cookies";
 
 export async function signup() {
     let login = document.getElementById('login');

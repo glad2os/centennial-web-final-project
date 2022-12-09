@@ -47,7 +47,7 @@ body.create {
             background-position: center;
             background-size: cover;
             left: 53px;
-            top: 10px;
+            top: 8px;
             z-index: 1000;
           }
 
@@ -57,6 +57,7 @@ body.create {
         }
 
         input {
+          font-size: 1.3rem;
           margin-left: 15px;
           text-transform: uppercase;
           background-color: #636060;

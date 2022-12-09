@@ -1,6 +1,7 @@
 class noDataFound extends Error {
-    constructor () {
-        super("No data found")
+    constructor (text = null) {
+        super(text !== null ? text : "No data found");
+
         this.name = this.constructor.name
         this.status = 400
     }

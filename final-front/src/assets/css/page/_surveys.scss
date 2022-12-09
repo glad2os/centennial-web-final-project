@@ -1,4 +1,21 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300&display=swap');
+
 body.surveys {
+
+  .update-survey {
+    justify-content: center;
+    margin: 30px 400px 0 400px;
+
+    textarea {
+      font-family: 'JetBrains Mono', monospace;
+      color: white;
+      background-color: #212121;
+      width: 100%;
+      border-radius: 33px;
+      padding: 15px;
+    }
+  }
+
   background-color: #212121;
 
   flex-direction: column;
@@ -11,10 +28,11 @@ body.surveys {
     margin: 30px 400px 0 400px;
 
     .survey {
-      .question{
+      .question {
         font-size: 2rem;
         margin-bottom: 2rem;
       }
+
       .surveyQuestion-wrapper {
         display: flex;
         flex: 1;
@@ -26,7 +44,8 @@ body.surveys {
         justify-content: space-around;
 
         user-select: none;
-        .back, .next, .button {
+
+        .back, .next, .update, .button {
           background-color: #FF4C50;
           padding: 5px 25px;
           border-radius: 33px;
@@ -91,9 +110,9 @@ body.surveys {
         justify-content: right;
         flex: 1;
 
-        .dislike {
+        .like {
           background-repeat: no-repeat;
-          background-image: url("http://localhost:3030/images/dislike.svg");
+          background-image: url("http://localhost:3030/images/like.svg");
           height: 64px;
           width: 64px;
 
@@ -103,10 +122,11 @@ body.surveys {
           }
         }
 
-        .like {
+        .remove {
           margin-left: 30px;
           background-repeat: no-repeat;
-          background-image: url("http://localhost:3030/images/like.svg");
+          background-image: url("http://localhost:3030/images/remove.svg");
+          background-size: contain;
           height: 64px;
           width: 64px;
 

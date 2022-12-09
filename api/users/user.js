@@ -16,7 +16,7 @@ router.post('/token', async function (req, res, next) {
         const userToken = await verifyAccessToken(req.body.token);
         const userById = await getUserById(userToken.username);
 
-        res.json({username: userById.login});
+        res.json({username: userById.login, id: userById.id});
     } catch (e) {
         next(e);
     }
