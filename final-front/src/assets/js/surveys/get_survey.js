@@ -16,8 +16,8 @@ async function get_survey() {
     let current = 0;
 
     const statistics = await postData("/statistics/info",{});
-    let statisticsJSON = await statistics.json();
-    statisticsJSON = statisticsJSON[0];
+    let statisticsJSONArray = await statistics.json();
+    let statisticsJSON = statisticsJSONArray[0];
     response.forEach(it => {
         const survey = document.createElement('div');
         survey.classList.add("survey");
@@ -44,11 +44,11 @@ async function get_survey() {
             label.setAttribute('for', `${it._id}|${answersKey}`)
             label.innerText = it.answers[answersKey];
 
-            if(statisticsJSON.answers){
+            if(statisticsJSON && statisticsJSON.answers){
                 let statisticsObj = statisticsJSON.answers.find(id=> id.id === it._id)
                     .statistics.find(it => it.id === Number(answersKey));
 
-                if(statisticsObj.count){
+                if(statisticsObj && statisticsObj.count){
                     label.innerText += ` (TOTAL: ${statisticsObj.count})`;
                 }
             }
