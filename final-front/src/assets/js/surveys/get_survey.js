@@ -46,10 +46,11 @@ async function get_survey() {
 
             if(statisticsJSON && statisticsJSON.answers){
                 let statisticsObj = statisticsJSON.answers.find(id=> id.id === it._id)
-                    .statistics.find(it => it.id === Number(answersKey));
-
-                if(statisticsObj && statisticsObj.count){
-                    label.innerText += ` (TOTAL: ${statisticsObj.count})`;
+                if(statisticsObj !== undefined){
+                    let findStat = statisticsObj.statistics.find(it => it.id === Number(answersKey));
+                    if(findStat && findStat.count){
+                        label.innerText += ` (TOTAL: ${findStat.count})`;
+                    }
                 }
             }
 
